@@ -1,46 +1,36 @@
 // Инициализация Telegram WebApp
 let tg = window.Telegram.WebApp;
-
-// Расширяем приложение на весь экран
 tg.expand();
 
-// Показываем основную кнопку
-tg.MainButton.setText("Отправить данные");
-tg.MainButton.show();
+console.log("🚀 Мини-приложение загружено");
+console.log("Telegram WebApp версия:", tg.version);
+console.log("initData:", tg.initData);
 
-// Отправка данных при нажатии на кнопку
-tg.MainButton.onClick(function() {
-    const data = {
-        action: "test",
-        message: "Привет от мини-приложения!",
-        timestamp: new Date().toISOString()
-    };
-    
-    // Отправляем данные в бота
-    tg.sendData(JSON.stringify(data));
-    
-    // Показываем уведомление
-    tg.showAlert("Данные отправлены в бота!");
-});
-
-// Также можно отправлять по нажатию на свою кнопку
 function sendData() {
+    console.log("📤 Отправка данных...");
+    
     const data = {
         action: "test",
         message: "Привет от мини-приложения!",
         timestamp: new Date().toISOString()
     };
     
-    tg.sendData(JSON.stringify(data));
-    tg.showAlert("Данные отправлены в бота!");
+    console.log("Данные для отправки:", data);
+    
+    try {
+        // Отправляем в бота
+        tg.sendData(JSON.stringify(data));
+        console.log("✅ Данные отправлены через tg.sendData()");
+        
+        // Простое уведомление
+        alert("✅ Данные отправлены! Проверьте чат с ботом.");
+        
+    } catch (error) {
+        console.error("❌ Ошибка отправки:", error);
+        alert("❌ Ошибка: " + error.message);
+    }
 }
 
-// Показываем информацию о пользователе
-const user = tg.initDataUnsafe?.user;
-if (user) {
-    console.log("Пользователь:", user);
-}
-
-// Настраиваем цвета под тему Telegram
-document.body.style.backgroundColor = tg.themeParams.bg_color || '#ffffff';
-document.body.style.color = tg.themeParams.text_color || '#000000';
+// Тест при загрузке
+console.log("Telegram WebApp доступен:", !!tg);
+console.log("Метод sendData доступен:", typeof tg.sendData === 'function');
